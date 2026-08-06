@@ -83,7 +83,7 @@ export default function InputLine({
           autoCorrect="off"
           autoCapitalize="off"
           spellCheck={false}
-          placeholder={disabled ? '' : 'ask me anything, or type /help\u2026'}
+          placeholder={disabled ? '' : 'ask me anything, or type /help...'}
           style={{
             flex: 1,
             minWidth: 0,

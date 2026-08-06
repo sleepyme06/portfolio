@@ -5,30 +5,30 @@
 
 @import "tailwindcss";
 
-/* ── CSS Custom Properties — DARK THEME (Palette 1: warm pink / plum) ── */
+/* ── CSS Custom Properties — DARK THEME (Palette 1: Cyber Neon Dark) ── */
 :root {
   /* Backgrounds */
-  --color-bg:        #2c0f30;
-  --color-surface:   #3a1240;   /* slightly lifted from bg */
-  --color-surface-2: #4a1850;
-  --color-border:    #75024d;
+  --color-bg:        #250013;
+  --color-surface:   #47155d;
+  --color-surface-2: #51448a;
+  --color-border:    #51448a;
 
   /* Core palette 1 */
-  --color-pink:      #ffa7bf;
-  --color-rose:      #ec7d9b;
-  --color-accent:    #e64667;
-  --color-magenta:   #a02552;
-  --color-plum:      #75024d;
-  --color-orange:    #e18434;
-  --color-amber:     #ffa01b;
-  --color-yellow:    #ffbd20;
+  --color-pink:      #ffeee7;
+  --color-rose:      #4fb0bd;
+  --color-accent:    #5374ce;
+  --color-magenta:   #47155d;
+  --color-plum:      #51448a;
+  --color-orange:    #78f14c;
+  --color-amber:     #e2f37e;
+  --color-yellow:    #ffeee7;
 
   /* Text roles */
-  --color-text-primary:   #ffa7bf;   /* main output */
-  --color-text-secondary: #ec7d9b;   /* labels */
-  --color-text-dim:       #75024d;   /* muted */
-  --color-text-user:      #ffbd20;   /* user typed */
-  --color-text-cmd:       #ffa01b;   /* command names */
+  --color-text-primary:   #ffeee7;   /* soft warm light text on dark bg */
+  --color-text-secondary: #4fb0bd;   /* cyan / teal labels */
+  --color-text-dim:       #7a569c;   /* muted violet */
+  --color-text-user:      #78f14c;   /* electric green user input */
+  --color-text-cmd:       #e2f37e;   /* neon lime-yellow command names */
 
   /* Typography */
   --font-mono: 'VT323', monospace;
@@ -40,50 +40,50 @@
   --thinking-dot:  400ms;
 
   /* Phosphor glows */
-  --glow-pink:   0 0 8px rgba(255,167,191,0.4);
-  --glow-amber:  0 0 8px rgba(255,160,27,0.45);
-  --glow-rose:   0 0 8px rgba(236,125,155,0.5);
-  --glow-border: 0 0 14px rgba(117,2,77,0.5);
+  --glow-pink:   0 0 8px rgba(255,238,231,0.4);
+  --glow-amber:  0 0 10px rgba(120,241,76,0.5);
+  --glow-rose:   0 0 8px rgba(79,176,189,0.5);
+  --glow-border: 0 0 14px rgba(83,116,206,0.4);
 
   /* Ambient blob colors */
-  --blob-a: #75024d;
-  --blob-b: #a02552;
+  --blob-a: #47155d;
+  --blob-b: #5374ce;
 }
 
-/* ── LIGHT THEME (Palette 2: mint / indigo / teal) ── */
+/* ── LIGHT THEME (Palette 2: Vintage Pastel Aesthetic) ── */
 [data-theme="light"] {
   /* Backgrounds */
-  --color-bg:        #f0f6e8;
-  --color-surface:   #f0dab1;
-  --color-surface-2: #e8c9a0;
-  --color-border:    #c45d9f;
+  --color-bg:        #fef7ef;
+  --color-surface:   #ffe5d1;
+  --color-surface-2: #dbb7c2;
+  --color-border:    #c75061;
 
   /* Core palette 2 */
-  --color-pink:      #e39aac;
-  --color-rose:      #c45d9f;
-  --color-accent:    #6461c2;
-  --color-magenta:   #634b7d;
-  --color-plum:      #634b7d;
-  --color-orange:    #2ba9b4;
-  --color-amber:     #2ba9b4;
-  --color-yellow:    #93d4b5;
+  --color-pink:      #ffa7a4;
+  --color-rose:      #c75061;
+  --color-accent:    #6475a1;
+  --color-magenta:   #8d4a5a;
+  --color-plum:      #8b69a5;
+  --color-orange:    #fea47d;
+  --color-amber:     #6cb0b0;
+  --color-yellow:    #fdeead;
 
   /* Text roles */
-  --color-text-primary:   #634b7d;   /* deep purple — readable on cream */
-  --color-text-secondary: #c45d9f;
-  --color-text-dim:       #9b82b0;
-  --color-text-user:      #2ba9b4;   /* teal for user input */
-  --color-text-cmd:       #6461c2;   /* indigo for commands */
+  --color-text-primary:   #403037;   /* dark espresso — crisp on warm cream */
+  --color-text-secondary: #8d4a5a;   /* rich berry plum */
+  --color-text-dim:       #ae8f9a;   /* soft dusty violet */
+  --color-text-user:      #6cb0b0;   /* sage teal user text */
+  --color-text-cmd:       #6475a1;   /* denim blue command names */
 
-  /* Glows off — light bg */
-  --glow-pink:   0 0 6px rgba(196,93,159,0.2);
-  --glow-amber:  0 0 6px rgba(43,169,180,0.2);
-  --glow-rose:   0 0 6px rgba(196,93,159,0.2);
-  --glow-border: 0 0 8px rgba(196,93,159,0.25);
+  /* Glows off / soft shadows for light theme */
+  --glow-pink:   0 0 6px rgba(199,80,97,0.2);
+  --glow-amber:  0 0 6px rgba(108,176,176,0.2);
+  --glow-rose:   0 0 6px rgba(141,74,90,0.2);
+  --glow-border: 0 0 8px rgba(199,80,97,0.25);
 
   /* Ambient blob colors */
-  --blob-a: #e39aac;
-  --blob-b: #93d4b5;
+  --blob-a: #a495c4;
+  --blob-b: #6cb0b0;
 }
 
 /* ── Base Reset ── */

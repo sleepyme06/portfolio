@@ -8,7 +8,7 @@ import ThinkingIndicator from './ThinkingIndicator';
 function MessageLine({ msg }) {
   // ── Boot lines: dim / muted ──
   if (msg.type === 'boot') {
-    const isHighlight = msg.text.startsWith('\u2726');
+    const isHighlight = msg.text.startsWith('✦');
     return (
       <div
         style={{

@@ -18,16 +18,16 @@ const BOOT_LINES = [
   { raw: 'loading projects.tar.gz    [OK]', delay: 960 },
   { raw: 'connecting to human...     [OK]', delay: 1240 },
   { raw: '', delay: 1520 },
-  { raw: '\u2726  type /help to see all commands, or just ask me anything  \u2726', delay: 1700 },
+  { raw: '✦  type /help to see all commands, or just ask me anything  ✦', delay: 1700 },
 ];
 
 // Build help response from PUBLIC_COMMANDS list
 function buildHelpResponse() {
   const lines = [
     'Available commands:\n',
-    ...PUBLIC_COMMANDS.map(c => `  ${c.command.padEnd(18)} \u2014 ${c.description}`),
-    "\nYou can also ask me anything in plain text \u2014 I'll do my best.",
-    'Easter eggs exist. \uD83C\uDF38',
+    ...PUBLIC_COMMANDS.map(c => `  ${c.command.padEnd(18)} — ${c.description}`),
+    "\nYou can also ask me anything in plain text — I'll do my best.",
+    'Easter eggs exist. 🌸',
   ];
   return lines.join('\n');
 }
@@ -270,7 +270,7 @@ export default function Terminal() {
               fontFamily: 'var(--font-mono)',
             }}
           >
-            arpita@portfolio \u2014 bash \u2014 80\u00d724
+            arpita@portfolio — bash 
           </span>
 
           {/* Handwritten welcome note — fades in after boot */}
@@ -291,7 +291,7 @@ export default function Terminal() {
                   textShadow: '0 0 10px rgba(236,125,155,0.4)',
                 }}
               >
-                made with \uD83C\uDF38 by Arpita
+                made by Arpita 🎀✨
               </motion.span>
             )}
           </AnimatePresence>

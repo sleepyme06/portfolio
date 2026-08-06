@@ -46,7 +46,7 @@ export default function Autocomplete({ matches, selectedIdx, onSelect }) {
             </span>
             {cmd.description && (
               <span style={{ color: 'var(--color-text-dim)', fontSize: '0.9em' }}>
-                \u2014 {cmd.description}
+                — {cmd.description}
               </span>
             )}
           </div>
@@ -64,7 +64,7 @@ export default function Autocomplete({ matches, selectedIdx, onSelect }) {
           opacity: 0.7,
         }}
       >
-        \u2191\u2193 navigate \u00b7 Tab to complete \u00b7 Esc to close
+        ↑↓ navigate · Tab to complete · Esc to close
       </div>
     </div>
   );
