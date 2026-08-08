@@ -1,0 +1,185 @@
+{
+  "full_name": "Arpita Verma",
+  "headline": "AI/ML Engineer | Open Source Contributor |Software Engineer",
+  "summary": "Computer Science undergraduate specializing in machine learning, computer vision, and Linux-based network systems. Experienced in building end-to-end ML pipelines, from data collection to real-time deployment, and testing 4G/5G network architectures through open-source infrastructure projects.",
+  "contact": {
+    "email": "arpitaverma005@gmail.com",
+    "phone": "7986888135",
+    "location": "Patiala, IN",
+    "website": null
+  },
+  "social_links": [
+    { "platform": "GitHub", "url": "https://github.com/sleepyme06" },
+    { "platform": "LinkedIn", "url": "https://www.linkedin.com/in/arpita-verma-2574a5371/" },
+    { "platform": "itch.io", "url": "https://itch.io/profile/sleepyme06" }
+  ],
+  "skills": [
+    { "name": "Python" },
+    { "name": "C++" },
+    { "name": "C" },
+    { "name": "Git" },
+    { "name": "GitHub" },
+    { "name": "Linux" },
+    { "name": "MATLAB" },
+    { "name": "Scikit-learn" },
+    { "name": "XGBoost" },
+    { "name": "PyTorch" },
+    { "name": "YOLO" },
+    { "name": "OpenCV" },
+    { "name": "MediaPipe" },
+    { "name": "GODOT" }
+  ],
+  "experience": [
+    {
+      "company": "Magma Core (Linux Foundation)",
+      "title": "LFX Mentee",
+      "location": "Remote",
+      "start_date": "2026-05-01",
+      "end_date": null,
+      "is_current": true,
+      "summary": "Contributed to Magma Core, an open-source 4G/5G mobile network platform, as part of the Linux Foundation's LFX Mentorship program.",
+      "achievements": [
+        "Deployed and configured Magma using Docker and Linux virtual machines to simulate mobile network infrastructure",
+        "Tested network registration and session flows using Wireshark, UERANSIM, and PacketRusher to validate 4G/5G functionality",
+        "Collaborated with mentors via GitHub and Slack to understand and contribute to Magma's microservices architecture"
+      ],
+      "tech_stack": ["Python", "C++", "Linux", "Docker", "Wireshark", "UERANSIM", "PacketRusher"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Thapar Institute of Engineering & Technology",
+      "degree": "B.E",
+      "field_of_study": "Computer Science",
+      "start_date": "2023-08-01",
+      "end_date": "2027-07-31",
+      "gpa": 7.68
+    }
+  ],
+  "projects": [
+    {
+      "name": "palm-pop",
+      "description": "a real-time computer vision pipeline that maps webcam hand gesture detection to keyboard input for gameplay control.",
+      "role": "Solo Developer",
+      "tech_stack": ["Python", "OpenCV", "YOLOv8", "MediaPipe", "PyAutoGUI"],
+      "url": "",
+      "repo_url": "https://github.com/sleepyme06/palm-pop",
+      "highlights": [
+        "Trained and benchmarked YOLOv8n/s via transfer learning for 3-class hand gesture detection, achieving 99.4% mAP@50 and 97.7% recall on a custom 394-image dataset",
+        "Built a real-time CV pipeline mapping webcam gesture detection to keyboard input using priority-based action resolution and cooldown logic",
+        "Built a reproducible data pipeline with fixed-seed train/val splits and benchmarked model size vs. speed/accuracy tradeoffs to select the optimal deployment model"
+      ]
+    },
+    {
+      "name": "pink-soc",
+      "description": "a two-stage cyberattack detection and response agent that classifies network traffic into 15 attack types and automates a response action for each flow.",
+      "role": "Solo Developer",
+      "tech_stack": ["Python", "XGBoost", "PyTorch", "Gymnasium", "Gradio"],
+      "url": "",
+      "repo_url": "https://github.com/sleepyme06/pink-soc",
+      "highlights": [
+        "Classifies network traffic into 15 attack types (DDoS, Port Scan, SQL Injection, etc.) and automates a response action (Allow, Block, Alert, Isolate) for each flow",
+        "Trained an XGBoost classifier on the CICIDS2017 dataset (2.27M+ traffic records across 8 days), achieving 99.64% test accuracy",
+        "Applied the full ML lifecycle end-to-end — preprocessing an imbalanced real-world security dataset, reinforcement learning, and deployment as a working Gradio app"
+      ]
+    },
+ {
+  "name": "its-giving-hire",
+  "description": "An AI-powered resume screening tool that uses agentic AI to evaluate and shortlist candidates automatically.",
+  "role": "Solo Developer",
+  "tech_stack": ["Python", "Groq", "Agentic AI"],
+  "url": "",
+  "repo_url": "https://github.com/sleepyme06/its-giving-hire",
+  "highlights": [
+    "Built an agentic pipeline that screens resumes against job criteria using Groq-hosted LLMs for fast inference",
+    "Designed to automate a traditionally manual first-pass hiring step, reducing recruiter screening time"
+  ]
+},
+{
+  "name": "phantom-fill",
+  "description": "A browser automation tool that silently fills and submits Google Forms multiple times — set it, forget it, vanish.",
+  "role": "Solo Developer",
+  "tech_stack": ["Python", "Selenium"],
+  "url": "",
+  "repo_url": "https://github.com/sleepyme06/phantom-fill",
+  "highlights": [
+    "Automated repeated Google Form submissions using Selenium-driven browser scripting",
+    "Built for hands-off, headless execution with minimal user intervention once configured"
+  ]
+},
+{
+  "name": "numpie",
+  "description": "An ASCII art generator that converts images into text-based art using NumPy for pixel-level processing.",
+  "role": "Solo Developer",
+  "tech_stack": ["Python", "NumPy"],
+  "url": "",
+  "repo_url": "https://github.com/sleepyme06/numpie",
+  "highlights": [
+    "Used NumPy array operations to map image pixel intensity to ASCII character sets",
+    "Built as a from-scratch exploration of image processing fundamentals without relying on higher-level CV libraries"
+  ]
+},
+{
+  "name": "serve",
+  "description": "My first built-from-scratch game — a playable project made while learning Godot game development.",
+  "role": "Solo Developer",
+  "tech_stack": ["Godot", "GDScript"],
+  "url": "https://sleepyme06.itch.io/serve",
+  "repo_url": "https://github.com/sleepyme06/serve",
+  "highlights": [
+    "Designed and shipped a complete playable game loop using the Godot engine",
+    "First end-to-end game dev project — covered scene management, input handling, and game logic in GDScript"
+  ]
+},
+{
+  "name": "brainless-game-jam",
+  "description": "A game jam entry built under time constraints in Godot, focused on rapid prototyping and creative constraint-driven design.",
+  "role": "Solo Developer",
+  "tech_stack": ["Godot", "GDScript"],
+  "url": "https://pepti.itch.io/lil-spelunkers",
+  "repo_url": "",
+  "highlights": [
+    "Built and shipped a playable prototype within a fixed game jam timeframe",
+    "Practiced fast iteration and scope management under time pressure"
+  ]
+}
+  ],
+  "open_source_contributions": [
+    {
+  "project_name": "WinHome (DotDev262)",
+  "role": "Contributor (GSSoC 2026)",
+  "description": "Contributed documentation for the Ditto config provider plugin in WinHome, a declarative Infrastructure-as-Code tool for Windows dev environments, as part of GirlScript Summer of Code 2026.",
+  "repo_url": "https://github.com/DotDev262/WinHome",
+  "contributions": [
+    "Authored documentation for the Ditto config provider plugin, closing issue #446 (PR #475, merged)"
+  ]
+},
+{
+  "project_name": "discord-quiz-bot (OAIEDU)",
+  "role": "Contributor",
+  "description": "Fixed a bug in OAIEDU's Discord Quiz Bot where the /rank command crashed for the student role when no leaderboard data existed.",
+  "repo_url": "https://github.com/sleepyme06/discord-quiz-bot",
+  "contributions": [
+    "Fixed /rank command failure when no users were registered, replacing the crash with a proper fallback message (PR #39, merged, closing issue #35)"
+  ]
+}
+  ],
+  "certifications": [
+    {
+      "name": "Ethical Hacker",
+      "issuer": "Cisco Networking Academy (via Thapar Institute of Engineering and Technology)",
+      "issue_date": "2026-05-03"
+    },
+    {
+      "name": "Network Defense",
+      "issuer": "Cisco Networking Academy (via Thapar Institute of Engineering and Technology)",
+      "issue_date": "2026-02-04"
+    }
+  ],
+  "languages_spoken": ["English", "Hindi", "Punjabi"],
+  "interests": ["Open source", "GameDev", "Cybersecurity", "Travel", "Photography"],
+  "faq": {
+    "Why should we hire you?": "",
+    "What are you looking for in your next role?": ""
+  }
+}
