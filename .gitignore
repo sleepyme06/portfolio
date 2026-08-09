@@ -1,0 +1,28 @@
+# Environment variables (SECURITY - NEVER COMMIT)
+.env
+*.env
+*.env.local
+!.env.example
+
+# Node / Frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.python-version
+*.log
+
+# Operating System & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

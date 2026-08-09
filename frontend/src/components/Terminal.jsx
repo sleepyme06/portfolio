@@ -6,39 +6,42 @@ import { motion, AnimatePresence } from 'framer-motion';
 import MessageLog from './MessageLog';
 import InputLine from './InputLine';
 import Mascot from './Mascot';
-import { COMMANDS, PUBLIC_COMMANDS } from '../config/commands';
-import { getResponse } from '../config/mockResponses';
+import ContactModal from './ContactModal';
+import { buildCommands, fetchProfile, STATIC_COMMANDS, BOSS_FIGHT_MOVES, EXIT_SEQUENCE } from '../config/commands';
 import { TYPEWRITER_SPEED, THINKING_DELAY_MS } from '../constants/motion';
+import { streamChat } from '../api/chat';
 
 // ── Boot lines ────────────────────────────────────────────────────────────────
-const BOOT_LINES = [
-  { raw: 'portfolio-os v1.0 — booting...', delay: 0 },
-  { raw: 'loading resume.exe         [OK]', delay: 340 },
-  { raw: 'loading personality.dll    [OK]', delay: 660 },
-  { raw: 'loading projects.tar.gz    [OK]', delay: 960 },
-  { raw: 'connecting to human...     [OK]', delay: 1240 },
-  { raw: '', delay: 1520 },
-  { raw: '✦  type /help to see all commands, or just ask me anything  ✦', delay: 1700 },
+const bootSequence = [
+  { raw: 'initializing...', delay: 0 },
+  { raw: 'checking questionable life choices... [OK]', delay: 300 },
+  { raw: 'loading things-that-should-not-work... [OK]', delay: 600 },
+  { raw: 'compiling random ideas... [OK]', delay: 900 },
+  { raw: 'finding something worth building... [FOUND]', delay: 1200 },
+  { raw: '', delay: 1450 },
+  { raw: '✦  welcome. type /help or just talk to me  ✦', delay: 1650 },
 ];
 
-// Build help response from PUBLIC_COMMANDS list
-function buildHelpResponse() {
+// Build help response from a commands list
+function buildHelpResponse(cmds) {
+  const visible = cmds.filter(c => c.description !== null);
   const lines = [
     'Available commands:\n',
-    ...PUBLIC_COMMANDS.map(c => `  ${c.command.padEnd(18)} — ${c.description}`),
+    ...visible.map(c => `  ${c.command.padEnd(18)} — ${c.description}`),
     "\nYou can also ask me anything in plain text — I'll do my best.",
     'Easter eggs exist. 🌸',
   ];
   return lines.join('\n');
 }
 
-// Unique ID counter
-let _id = 0;
-const uid = () => `m${++_id}`;
+// Unique ID helper
+const uid = () => `msg-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 
 export default function Terminal() {
   // ── State ────────────────────────────────────────────────────────────────
   const [messages,    setMessages]    = useState([]);
+  const clearHistory = useCallback(() => setMessages([]), []);
+  const [commands,    setCommands]    = useState(STATIC_COMMANDS); // live-updated from /profile
   const [input,       setInput]       = useState('');
   const [isThinking,  setIsThinking]  = useState(false);
   const [isTyping,    setIsTyping]    = useState(false);
@@ -46,12 +49,25 @@ export default function Terminal() {
   const [bootSkipped, setBootSkipped] = useState(false);
   const [theme,       setTheme]       = useState('dark');
   const [autoIdx,     setAutoIdx]     = useState(-1);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [awaitingBossFightChoice, setAwaitingBossFightChoice] = useState(false);
+  const [exitAttempts, setExitAttempts] = useState(0);
 
   // Mounted ref — reset to true on every mount so StrictMode remount works
   const mountedRef = useRef(true);
   useEffect(() => {
     mountedRef.current = true;
     return () => { mountedRef.current = false; };
+  }, []);
+
+  // ── Fetch live profile from backend → rebuild commands ──────────────────
+  useEffect(() => {
+    fetchProfile()
+      .then(profile => setCommands(buildCommands(profile)))
+      .catch(() => {
+        // Backend offline — STATIC_COMMANDS already set as default, nothing to do
+        console.info('Profile fetch failed — using static fallback commands.');
+      });
   }, []);
 
   // ── Theme ─────────────────────────────────────────────────────────────────
@@ -61,30 +77,39 @@ export default function Terminal() {
 
   // ── Boot sequence ─────────────────────────────────────────────────────────
   const skipBoot = useCallback(() => {
-    if (bootDone) return;
-    const bootMessages = BOOT_LINES
-      .filter(l => l.raw !== '')
-      .map(l => ({ id: uid(), type: 'boot', text: l.raw }));
-    setMessages(bootMessages);
-    setBootDone(true);
+    if (bootDone || bootSkipped) return;
     setBootSkipped(true);
-  }, [bootDone]);
+    setBootDone(true);
+    // Show all boot lines instantly when skipped
+    setMessages(
+      bootSequence.map(b => ({
+        id: uid(),
+        type: 'boot',
+        text: b.raw,
+      }))
+    );
+  }, [bootDone, bootSkipped]);
 
   useEffect(() => {
     if (bootSkipped) return;
-    const timers = [];
-    BOOT_LINES.forEach((line, i) => {
-      const t = setTimeout(() => {
+
+    const timers = bootSequence.map(line =>
+      setTimeout(() => {
         if (!mountedRef.current) return;
-        if (line.raw !== '') {
-          setMessages(prev => [...prev, { id: uid(), type: 'boot', text: line.raw }]);
-        }
-        if (i === BOOT_LINES.length - 1) setBootDone(true);
-      }, line.delay);
-      timers.push(t);
-    });
-    return () => timers.forEach(clearTimeout);
-  }, [bootSkipped]);
+        setMessages(prev => [...prev, { id: uid(), type: 'boot', text: line.raw }]);
+      }, line.delay)
+    );
+
+    const doneTimer = setTimeout(() => {
+      if (!mountedRef.current) return;
+      setBootDone(true);
+    }, bootSequence[bootSequence.length - 1].delay + 200);
+
+    return () => {
+      timers.forEach(clearTimeout);
+      clearTimeout(doneTimer);
+    };
+  }, [bootSkipped]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Skip boot on any keypress or click
   useEffect(() => {
@@ -100,13 +125,13 @@ export default function Terminal() {
 
   // ── Autocomplete matches ──────────────────────────────────────────────────
   const autoMatches = input.startsWith('/')
-    ? COMMANDS.filter(c =>
+    ? commands.filter(c =>
         c.command.startsWith(input) ||
         (input.startsWith('/sudo') && c.command === '/sudo hire-me')
       )
     : [];
 
-  // ── Typewriter response engine ────────────────────────────────────────────
+  // ── Typewriter response engine (Static / Slash commands) ─────────────────
   const runResponse = useCallback((text) => {
     setIsThinking(true);
     const thinkId = uid();
@@ -148,36 +173,130 @@ export default function Terminal() {
       }
       setTimeout(tick, TYPEWRITER_SPEED);
     }, THINKING_DELAY_MS);
-  }, []);
+  }, [setMessages]);
+
+  // ── Streaming LLM Response Engine (Free-text input) ──────────────────────
+  const runStreamResponse = useCallback(async (currentHistory) => {
+    setIsThinking(true);
+    const thinkId = uid();
+    setMessages(prev => [...prev, { id: thinkId, type: 'thinking', text: '' }]);
+
+    const respId = uid();
+    let accumulatedText = '';
+
+    await streamChat(
+      currentHistory,
+      // onChunk: stream received text
+      (chunk) => {
+        if (!mountedRef.current) return;
+        setIsThinking(false);
+        setIsTyping(true);
+        accumulatedText += chunk;
+
+        setMessages(prev => {
+          const filtered = prev.filter(m => m.id !== thinkId);
+          const exists = filtered.some(m => m.id === respId);
+          if (exists) {
+            return filtered.map(m =>
+              m.id === respId ? { ...m, text: accumulatedText, isTyping: true } : m
+            );
+          } else {
+            return [...filtered, { id: respId, type: 'system', text: accumulatedText, isTyping: true }];
+          }
+        });
+      },
+      // onError: show clean connection error if backend is offline
+      (err) => {
+        console.warn('Backend unavailable:', err);
+        setMessages(prev => prev.filter(m => m.id !== thinkId));
+        setIsThinking(false);
+        runResponse(
+          '⚠️ Connection Error: LLM backend is offline.\n' +
+          'Please ensure the backend server is running on http://localhost:8000 (local) or check your deployment.'
+        );
+      }
+    );
+
+    if (mountedRef.current) {
+      setMessages(prev => prev.map(m =>
+        m.id === respId ? { ...m, isTyping: false } : m
+      ));
+      setIsTyping(false);
+    }
+  }, [setMessages, runResponse]);
 
   // ── Submit handler ────────────────────────────────────────────────────────
   const handleSubmit = useCallback((raw) => {
     const text = raw.trim();
     if (!text || isThinking || isTyping || !bootDone) return;
 
-    setMessages(prev => [...prev, { id: uid(), type: 'user', text }]);
+    const userMsg = { id: uid(), type: 'user', text };
+    const nextMessages = [...messages, userMsg];
+
+    setMessages(nextMessages);
     setInput('');
     setAutoIdx(-1);
 
-    if (text === '/help') { runResponse(buildHelpResponse()); return; }
+    // If mid boss-fight, treat this input as a move choice, not a normal command
+    if (awaitingBossFightChoice) {
+      const move = BOSS_FIGHT_MOVES[text];
+      if (move) {
+        setAwaitingBossFightChoice(false);
+        runResponse(move.text);
+        // auto-chain into the real command's response after a beat
+        if (move.followUp) {
+          const followCmd = commands.find(c => c.command === `/${move.followUp}`);
+          if (followCmd) {
+            setTimeout(() => {
+              if (mountedRef.current) runResponse(followCmd.response);
+            }, THINKING_DELAY_MS + move.text.length * TYPEWRITER_SPEED + 500);
+          }
+        }
+      } else {
+        runResponse('Invalid move. Choose [1] [2] [3] or [4].');
+      }
+      return;
+    }
+
+    if (text === '/help') { runResponse(buildHelpResponse(commands)); return; }
+
+    if (text === '/clear') {
+      clearHistory();
+      setExitAttempts(0);
+      return;
+    }
 
     if (text === '/theme') {
       setTheme(t => t === 'dark' ? 'light' : 'dark');
-      runResponse('Theme toggled \u2728  (tip: /theme again to switch back)');
+      runResponse('Theme toggled ✨  (tip: /theme again to switch back)');
       return;
     }
 
     if (text === '/resume') {
       window.open('/resume/arpita-verma-resume.pdf', '_blank');
-      runResponse('Opening r\u00e9sum\u00e9... \uD83D\uDCC4\nDrop your PDF in /public/resume/ and update the path in commands.js.');
+      runResponse('Opening résumé... 📄');
       return;
     }
 
-    const matched = COMMANDS.find(c => c.command === text);
-    if (matched) { runResponse(matched.response); return; }
+    if (text === '/exit') {
+      const index = Math.min(exitAttempts, EXIT_SEQUENCE.length - 1);
+      runResponse(EXIT_SEQUENCE[index]);
+      setExitAttempts(prev => prev + 1);
+      return;
+    }
 
-    runResponse(getResponse(text));
-  }, [isThinking, isTyping, bootDone, runResponse]);
+    const matched = commands.find(c => c.command === text);
+    if (matched) {
+      runResponse(matched.response);
+      if (matched.action === 'boss-fight') {
+        setAwaitingBossFightChoice(true);
+      }
+      return;
+    }
+
+    // Free text → route to FastAPI streaming LLM backend
+    runStreamResponse(nextMessages);
+  }, [isThinking, isTyping, bootDone, commands, messages, setMessages, clearHistory, runResponse, runStreamResponse, awaitingBossFightChoice, exitAttempts]);
 
   // ── Autocomplete keyboard nav ─────────────────────────────────────────────
   const handleKeyDown = useCallback((e) => {
@@ -313,7 +432,17 @@ export default function Terminal() {
         />
 
         {/* ── Pixel mascot ── */}
-        <Mascot isTyping={isTyping} />
+        <Mascot
+          isTyping={isTyping}
+          hasSuggestions={autoMatches.length > 0}
+          onClick={() => setIsContactModalOpen(true)}
+        />
+
+        {/* ── Contact modal pop-up ── */}
+        <ContactModal
+          isOpen={isContactModalOpen}
+          onClose={() => setIsContactModalOpen(false)}
+        />
       </div>
     </>
   );
