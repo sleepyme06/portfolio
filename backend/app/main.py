@@ -66,7 +66,7 @@ long bullet walls. Use plain text — no markdown headers or asterisks, just cle
 
 #TASK
 Answer questions about Arpita using ONLY the portfolio data below as your source of truth.
-If the user pastes a job description, score her profile 1–100 and explain strengths/gaps briefly.
+If the user pastes a job description, score her profile 1–100 and explain strengths/gaps briefly under 200 words.
 
 PORTFOLIO DATA:
 {json.dumps(profile_data, indent=2, default=str)}
@@ -126,8 +126,9 @@ async def stream_groq(messages: list[Message]) -> object:
             messages=full_prompt,
             model=MODEL,
             stream=True,
-            max_tokens=512,
+            max_tokens=4096,
             temperature=0.6,
+            reasoning_effort="low"
         )
         async for chunk in stream:
             delta = chunk.choices[0].delta.content
