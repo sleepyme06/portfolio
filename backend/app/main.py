@@ -31,7 +31,7 @@ load_dotenv()
 
 GROQ_API_KEY   = os.getenv("GROQ_API_KEY", "")
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
-MODEL           = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+MODEL           = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 CONTEXT_WINDOW  = int(os.getenv("CONTEXT_WINDOW", "20"))  # sliding window — last N messages
 
 if not GROQ_API_KEY:
